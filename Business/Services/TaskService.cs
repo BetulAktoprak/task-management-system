@@ -25,9 +25,7 @@ public class TaskService : ITaskService
 
     public async Task<Result<List<TaskDto>>> GetTasksAsync()
     {
-        var tasks = await GetTasksQuery()
-            .OrderByDescending(t => t.CreatedAt)
-            .ToListAsync();
+        var tasks = await GetTasksQuery().ToListAsync();
 
         return Result<List<TaskDto>>.Success(tasks);
     }
@@ -36,7 +34,6 @@ public class TaskService : ITaskService
     {
         var tasks = await GetTasksQuery()
             .Where(t => t.ProjectId == projectId)
-            .OrderByDescending(t => t.CreatedAt)
             .ToListAsync();
 
         return Result<List<TaskDto>>.Success(tasks);
@@ -156,6 +153,7 @@ public class TaskService : ITaskService
             .Include(t => t.Project)
             .Include(t => t.AssignedUser)
             .Where(t => !t.IsDeleted)
+            .OrderByDescending(t => t.CreatedAt)
             .Select(t => new TaskDto
             {
                 Id = t.Id,

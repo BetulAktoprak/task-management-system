@@ -10,5 +10,4 @@ public class TaskDto
     public string ProjectName { get; set; } = string.Empty;
     public int? AssignedUserId { get; set; }
     public string? AssignedUserName { get; set; }
-    public int CreatedAt { get; set; }
 }
