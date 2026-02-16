@@ -112,4 +112,20 @@ public class TasksController : ControllerBase
 
         return Ok(new { message = "Görev ataması başarıyla güncellendi." });
     }
+
+    /// <summary>
+    /// Görevi siler (soft delete).
+    /// </summary>
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteTask(int id)
+    {
+        var result = await _taskService.DeleteTaskAsync(id);
+
+        if (result.IsFailure)
+        {
+            return NotFound(new { message = result.ErrorMessage });
+        }
+
+        return Ok(new { message = "Görev başarıyla silindi." });
+    }
 }

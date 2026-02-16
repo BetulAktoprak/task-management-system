@@ -53,6 +53,48 @@ public class UserService : IUserService
         return Result<List<RoleDto>>.Success(roles);
     }
 
+    public async Task<Result<UserDto>> GetUserByIdAsync(int userId)
+    {
+        var user = await _context.Users
+            .Include(u => u.Role)
+            .Where(u => u.Id == userId && !u.IsDeleted)
+            .Select(u => new UserDto
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Email = u.Email,
+                RoleName = u.Role.Name,
+                RoleId = u.RoleId
+            })
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return Result<UserDto>.Failure("Kullanıcı bulunamadı.");
+        }
+
+        return Result<UserDto>.Success(user);
+    }
+
+    public async Task<Result<List<UserDto>>> GetUsersForAssignmentAsync()
+    {
+        var users = await _context.Users
+            .Include(u => u.Role)
+            .Where(u => !u.IsDeleted)
+            .OrderBy(u => u.Name)
+            .Select(u => new UserDto
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Email = u.Email,
+                RoleName = u.Role.Name,
+                RoleId = u.RoleId
+            })
+            .ToListAsync();
+
+        return Result<List<UserDto>>.Success(users);
+    }
+
     public async Task<Result> AssignRoleAsync(AssignRoleDto assignRoleDto)
     {
         var user = await _userRepository.GetByIdAsync(assignRoleDto.UserId);

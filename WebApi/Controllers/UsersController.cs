@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Business.DTOs.User;
 using Business.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,28 @@ public class UsersController : ControllerBase
     }
 
     /// <summary>
+    /// Mevcut kullanıcının bilgilerini getirir.
+    /// </summary>
+    [HttpGet("me")]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        var result = await _userService.GetUserByIdAsync(userId.Value);
+
+        if (result.IsFailure)
+        {
+            return NotFound(new { message = result.ErrorMessage });
+        }
+
+        return Ok(result.Data);
+    }
+
+    /// <summary>
     /// Tüm kullanıcıları listeler. Sadece Admin erişebilir.
     /// </summary>
     [HttpGet]
@@ -25,6 +48,22 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetUsers()
     {
         var result = await _userService.GetUsersAsync();
+
+        if (result.IsFailure)
+        {
+            return BadRequest(new { message = result.ErrorMessage });
+        }
+
+        return Ok(result.Data);
+    }
+
+    /// <summary>
+    /// Görev atama vb. için kullanıcı listesini döndürür. Tüm giriş yapmış kullanıcılar erişebilir.
+    /// </summary>
+    [HttpGet("for-assignment")]
+    public async Task<IActionResult> GetUsersForAssignment()
+    {
+        var result = await _userService.GetUsersForAssignmentAsync();
 
         if (result.IsFailure)
         {
@@ -72,6 +111,12 @@ public class UsersController : ControllerBase
         }
 
         return Ok(new { message = "Rol başarıyla atandı." });
+    }
+
+    private int? GetCurrentUserId()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return int.TryParse(userIdClaim, out var userId) ? userId : null;
     }
 }
 

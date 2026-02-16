@@ -147,6 +147,19 @@ public class TaskService : ITaskService
         return Result.Success();
     }
 
+    public async Task<Result> DeleteTaskAsync(int id)
+    {
+        var task = await _taskRepository.GetByIdAsync(id);
+        if (task == null)
+        {
+            return Result.Failure("Görev bulunamadı.");
+        }
+
+        _taskRepository.Delete(task);
+        await _taskRepository.SaveChangesAsync();
+        return Result.Success();
+    }
+
     private IQueryable<TaskDto> GetTasksQuery()
     {
         return _context.Tasks

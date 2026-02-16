@@ -108,4 +108,17 @@ public class ProjectService : IProjectService
         var projectDto = await GetProjectByIdAsync(id);
         return projectDto;
     }
+
+    public async Task<Result> DeleteProjectAsync(int id)
+    {
+        var project = await _projectRepository.GetByIdAsync(id);
+        if (project == null)
+        {
+            return Result.Failure("Proje bulunamadı.");
+        }
+
+        _projectRepository.Delete(project);
+        await _projectRepository.SaveChangesAsync();
+        return Result.Success();
+    }
 }

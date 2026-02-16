@@ -1,27 +1,25 @@
-using System.Text;
 using Business.Services;
-using Microsoft.OpenApi.Models;
 using DataAccess;
-using WebApi.Hubs;
-using WebApi.Services;
 using DataAccess.Repositories;
-using Entity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+using WebApi.Hubs;
+using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
+    options.AddPolicy("AllowAll",
+        policy => policy
+            .WithOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
 });
 builder.Services.AddControllers();
 
@@ -130,8 +128,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
-app.UseCors();
+// CORS must be before UseHttpsRedirection and UseAuthentication
+app.UseCors("AllowAll");
+
+// Only redirect to HTTPS in production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

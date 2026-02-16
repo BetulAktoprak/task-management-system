@@ -88,6 +88,22 @@ public class ProjectsController : ControllerBase
         return Ok(result.Data);
     }
 
+    /// <summary>
+    /// Projeyi siler (soft delete).
+    /// </summary>
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteProject(int id)
+    {
+        var result = await _projectService.DeleteProjectAsync(id);
+
+        if (result.IsFailure)
+        {
+            return NotFound(new { message = result.ErrorMessage });
+        }
+
+        return Ok(new { message = "Proje başarıyla silindi." });
+    }
+
     private int? GetCurrentUserId()
     {
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
