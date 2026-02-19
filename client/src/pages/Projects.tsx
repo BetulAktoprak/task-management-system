@@ -20,6 +20,7 @@ export default function Projects() {
   const [submitting, setSubmitting] = useState(false);
   const [deletingProjectId, setDeletingProjectId] = useState<number | null>(null);
   const [projectToDelete, setProjectToDelete] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     loadProjects();
@@ -129,7 +130,7 @@ export default function Projects() {
       const year = date.getFullYear();
       
       return `${day}.${month}.${year}`;
-    } catch (error) {
+    } catch {
       return '';
     }
   };
@@ -162,28 +163,75 @@ export default function Projects() {
         </div>
       )}
 
-      {projects.length === 0 ? (
-        <div className="rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 p-12 text-center">
-          <svg className="w-14 h-14 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">Henüz proje yok</h3>
-          <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-            İlk projenizi oluşturarak görevlerinizi organize etmeye başlayın.
-          </p>
+      {/* Arama */}
+      <div className="relative">
+        <svg
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Proje adına göre ara..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+        />
+        {searchQuery && (
           <button
-            onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors"
+            type="button"
+            onClick={() => setSearchQuery('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+            title="Temizle"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
-            İlk Projenizi Oluşturun
           </button>
-        </div>
-      ) : (
+        )}
+      </div>
+
+      {(() => {
+        const query = searchQuery.trim().toLowerCase();
+        const filteredProjects = query
+          ? projects.filter((p) => p.name.toLowerCase().includes(query))
+          : projects;
+
+        return filteredProjects.length === 0 ? (
+          <div className="rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 p-12 text-center">
+            <svg className="w-14 h-14 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {query ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              )}
+            </svg>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">
+              {query ? 'Aramanızla eşleşen proje bulunamadı' : 'Henüz proje yok'}
+            </h3>
+            <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+              {query
+                ? 'Farklı bir arama terimi deneyin veya arama kutusunu temizleyin.'
+                : 'İlk projenizi oluşturarak görevlerinizi organize etmeye başlayın.'}
+            </p>
+            {!query && (
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                İlk Projenizi Oluşturun
+              </button>
+            )}
+          </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
+          {filteredProjects.map((project, index) => (
             <div
               key={project.id}
               className="group relative bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1"
@@ -300,7 +348,8 @@ export default function Projects() {
             </div>
           ))}
         </div>
-      )}
+        );
+      })()}
 
       {/* Create Project Modal */}
       {showCreateModal && (
