@@ -14,85 +14,97 @@ import Register from './pages/Register';
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          {/* Protected Routes - Giriş yapmış kullanıcılar için */}
-          <Route
-            path="/"
-            element={
+      <Routes>
+        {/* Protected Routes - Giriş yapmış kullanıcılar için */}
+        <Route
+          path="/"
+          element={
+            <Layout>
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
+            </Layout>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <Layout>
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/home"
-            element={
+            </Layout>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <Layout>
               <ProtectedRoute>
                 <Home />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/projects"
-            element={
+            </Layout>
+          }
+        />
+        <Route
+          path="/projects"
+          element={
+            <Layout>
               <ProtectedRoute>
                 <Projects />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/projects/:projectId/tasks"
-            element={
+            </Layout>
+          }
+        />
+        <Route
+          path="/projects/:projectId/tasks"
+          element={
+            <Layout>
               <ProtectedRoute>
                 <TaskBoard />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
+            </Layout>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Layout>
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/users"
-            element={
+            </Layout>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <Layout>
               <ProtectedRoute>
                 <Users />
               </ProtectedRoute>
-            }
-          />
+            </Layout>
+          }
+        />
 
-          {/* Public Routes - Giriş yapmamış kullanıcılar için */}
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <Login />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <PublicRoute>
-                <Register />
-              </PublicRoute>
-            }
-          />
-        </Routes>
-      </Layout>
+        {/* Public Routes - Giriş yapmamış kullanıcılar için */}
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+      </Routes>
     </Router>
   );
 }

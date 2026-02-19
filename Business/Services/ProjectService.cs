@@ -29,9 +29,11 @@ public class ProjectService : IProjectService
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
+                ImageUrl = p.ImageUrl,
                 CreatedBy = p.CreatedBy,
                 CreatorName = p.Creator.Name,
-                TaskCount = p.Tasks.Count(t => !t.IsDeleted)
+                TaskCount = p.Tasks.Count(t => !t.IsDeleted),
+                CreatedAt = p.CreatedAt
             })
             .ToListAsync();
 
@@ -48,9 +50,11 @@ public class ProjectService : IProjectService
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
+                ImageUrl = p.ImageUrl,
                 CreatedBy = p.CreatedBy,
                 CreatorName = p.Creator.Name,
-                TaskCount = p.Tasks.Count(t => !t.IsDeleted)
+                TaskCount = p.Tasks.Count(t => !t.IsDeleted),
+                CreatedAt = p.CreatedAt
             })
             .FirstOrDefaultAsync();
 
@@ -68,6 +72,7 @@ public class ProjectService : IProjectService
         {
             Name = createProjectDto.Name,
             Description = createProjectDto.Description,
+            ImageUrl = createProjectDto.ImageUrl,
             CreatedBy = userId
         };
 
@@ -84,9 +89,11 @@ public class ProjectService : IProjectService
             Id = project.Id,
             Name = project.Name,
             Description = project.Description,
+            ImageUrl = project.ImageUrl,
             CreatedBy = project.CreatedBy,
             CreatorName = creator ?? "",
-            TaskCount = 0
+            TaskCount = 0,
+            CreatedAt = project.CreatedAt
         };
 
         return Result<ProjectDto>.Success(projectDto);
@@ -102,6 +109,7 @@ public class ProjectService : IProjectService
 
         project.Name = updateProjectDto.Name;
         project.Description = updateProjectDto.Description;
+        project.ImageUrl = updateProjectDto.ImageUrl;
         _projectRepository.Update(project);
         await _projectRepository.SaveChangesAsync();
 

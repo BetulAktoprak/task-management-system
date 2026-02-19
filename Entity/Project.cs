@@ -4,6 +4,7 @@ public class Project : BaseEntity
 {
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
+    public string? ImageUrl { get; set; }
     public int CreatedBy { get; set; }
 
     // Navigation properties
