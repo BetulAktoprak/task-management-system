@@ -71,13 +71,14 @@ This project is built with **N-Tier Architecture**:
 dotnet restore
 dotnet ef database update
 dotnet run
-
+```
 ### Frontend
 
 ```bash
 cd client
 npm install
 npm run dev
+```
 
 ### Demo User
 Email: admin@admin.com
