@@ -1,26 +1,37 @@
 # 🚀 Task Management System
 
-A full-stack task & project management application developed with **ASP.NET Core Web API** and **React**.  
-The system allows teams to manage projects, assign tasks, track progress and control users with role-based authorization.
+ASP.NET Core Web API ve React kullanılarak geliştirilmiş full-stack bir görev ve proje yönetim uygulamasıdır.  
+Bu sistem ekiplerin proje oluşturmasını, görev atamasını, süreçleri takip etmesini ve rol bazlı yetkilendirme ile kullanıcı yönetimini sağlar.
 
 ---
 
-## 🧠 Features
+## 🧠 Özellikler
 
 - 🔐 JWT Authentication & Authorization
-- 👥 Role Management (Admin, Project Manager, Developer)
-- 📁 Project Management
-- ✅ Task Management (Kanban Board)
-- 📊 Dashboard with statistics
-- 👤 User Management
-- 🔄 Real-time ready infrastructure
-- 🎨 Modern and responsive UI
+- 👥 Rol Yönetimi (Admin, Project Manager, Developer)
+- 📁 Proje Yönetimi
+- ✅ Görev Yönetimi (Kanban Board)
+- 📊 İstatistiksel Dashboard
+- 👤 Kullanıcı Yönetimi
+- 🔔 SignalR ile gerçek zamanlı bildirim sistemi
+- 🎨 Modern ve responsive arayüz
 
 ---
 
-## 🏗️ Architecture
+## 🔔 Gerçek Zamanlı Bildirim Sistemi (SignalR)
 
-This project is built with **N-Tier Architecture**:
+Bir kullanıcıya görev atandığında, ilgili kullanıcıya **sayfa yenilenmeden anlık bildirim** gönderilir.  
+Bu yapı SignalR kullanılarak geliştirilmiştir ve sistem içi ekip iletişimini hızlandırmayı amaçlar.
+
+### 🎬 SignalR Bildirim Demo
+
+![SignalR Notification](./screenshots/notification-ezgif.com-video-to-gif-converter.gif)
+
+---
+
+## 🏗️ Mimari
+
+Bu proje **N-Tier Architecture** yapısı ile geliştirilmiştir:
 
 - Core
 - Entity
@@ -30,42 +41,43 @@ This project is built with **N-Tier Architecture**:
 
 ---
 
-## 🛠️ Technologies
+## 🛠️ Kullanılan Teknolojiler
 
-### Backend
+### 🔙 Backend
 - ASP.NET Core Web API
 - Entity Framework Core
 - MSSQL
 - JWT Authentication
+- SignalR
 
-### Frontend
+### 🎨 Frontend
 - React (Vite)
 - Axios
 
 ---
 
-## 📸 Screenshots
+## 📸 Ekran Görüntüleri
 
 ### 🔹 Dashboard
 ![Dashboard](./screenshots/image1.png)
 
-### 🔹 Projects
+### 🔹 Projeler
 ![Projects](./screenshots/image2.png)
 
-### 🔹 Task Board
+### 🔹 Görev Board
 ![Task Board](./screenshots/image3.png)
 
-### 🔹 Create Task
+### 🔹 Görev Oluşturma
 ![Create Task](./screenshots/image4.png)
 
-### 🔹 User & Role Management
+### 🔹 Kullanıcı & Rol Yönetimi
 ![Users](./screenshots/image5.png)
 
 ---
 
-## ⚙️ Installation
+## ⚙️ Kurulum
 
-### Backend
+### 🔙 Backend
 
 ```bash
 dotnet restore

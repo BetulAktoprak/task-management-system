@@ -18,4 +18,9 @@ public class TaskNotificationService : ITaskNotificationService
     {
         await _hubContext.Clients.All.SendAsync("TaskUpdated", task);
     }
+
+    public async Task NotifyTaskAssignedAsync(TaskDto task)
+    {
+        await _hubContext.Clients.All.SendAsync("TaskAssigned", task);
+    }
 }

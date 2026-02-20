@@ -88,7 +88,8 @@ public class TaskService : ITaskService
         var taskDto = await GetTaskByIdAsync(task.Id);
         if (taskDto.IsSuccess && taskDto.Data != null)
         {
-            await _taskNotificationService.NotifyTaskUpdatedAsync(taskDto.Data);
+            if (taskDto.Data.AssignedUserId.HasValue)
+                await _taskNotificationService.NotifyTaskAssignedAsync(taskDto.Data);
         }
         return taskDto;
     }
@@ -142,7 +143,7 @@ public class TaskService : ITaskService
         var taskDto = await GetTaskByIdAsync(taskId);
         if (taskDto.IsSuccess && taskDto.Data != null)
         {
-            await _taskNotificationService.NotifyTaskUpdatedAsync(taskDto.Data);
+            await _taskNotificationService.NotifyTaskAssignedAsync(taskDto.Data);
         }
         return Result.Success();
     }

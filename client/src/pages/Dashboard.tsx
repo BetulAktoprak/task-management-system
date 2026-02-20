@@ -70,6 +70,14 @@ export default function Dashboard() {
     loadDashboardStats();
   }, []);
 
+  // SignalR ile görev atandığında istatistikleri yenile
+  useEffect(() => {
+    const onTasksInvalidated = () => loadDashboardStats();
+    window.addEventListener('tasksInvalidated', onTasksInvalidated);
+    return () =>
+      window.removeEventListener('tasksInvalidated', onTasksInvalidated);
+  }, []);
+
   const loadDashboardStats = async () => {
     try {
       setLoading(true);

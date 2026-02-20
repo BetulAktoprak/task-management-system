@@ -80,7 +80,11 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ITaskNotificationService, TaskNotificationService>();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR()
+    .AddJsonProtocol(options =>
+    {
+        options.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

@@ -5,4 +5,5 @@ namespace Business.Services;
 public interface ITaskNotificationService
 {
     Task NotifyTaskUpdatedAsync(TaskDto task);
+    Task NotifyTaskAssignedAsync(TaskDto task);
 }

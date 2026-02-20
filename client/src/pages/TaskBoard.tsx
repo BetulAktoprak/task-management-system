@@ -67,6 +67,19 @@ export default function TaskBoard() {
     loadTasks();
   }, [projectId]);
 
+  // SignalR ile görev atandığında listeyi yenile (sayfa yenilemeye gerek kalmasın)
+  useEffect(() => {
+    const onTasksInvalidated = (e: Event) => {
+      const { task } = (e as CustomEvent<{ task: TaskDto }>).detail;
+      if (task.projectId === parseInt(projectId || '0')) {
+        loadTasks();
+      }
+    };
+    window.addEventListener('tasksInvalidated', onTasksInvalidated);
+    return () =>
+      window.removeEventListener('tasksInvalidated', onTasksInvalidated);
+  }, [projectId]);
+
   const loadUsersForAssignment = async () => {
     try {
       const data = await userService.getUsersForAssignment();
