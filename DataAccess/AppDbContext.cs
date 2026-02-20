@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using Entity;
 using Entity.Constants;
 using Entity.Enums;
@@ -60,5 +62,29 @@ public class AppDbContext : DbContext
             new Role { Id = 2, Name = RoleNames.ProjectManager, CreatedAt = seedDate },
             new Role { Id = 3, Name = RoleNames.Developer, CreatedAt = seedDate }
         );
+
+        // Admin user seed (email: admin@admin.com, password: 123456)
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = 1,
+                Name = "Admin",
+                Email = "admin@admin.com",
+                PasswordHash = HashPasswordForSeed("123456"),
+                RoleId = 1,
+                CreatedAt = seedDate,
+                IsDeleted = false
+            }
+        );
+    }
+
+    /// <summary>
+    /// AuthService ile aynı algoritma: SHA256 + Base64 (seed için).
+    /// </summary>
+    private static string HashPasswordForSeed(string password)
+    {
+        using var sha256 = SHA256.Create();
+        var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+        return Convert.ToBase64String(hashedBytes);
     }
 }
